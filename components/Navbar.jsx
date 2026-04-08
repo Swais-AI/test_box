@@ -1,13 +1,17 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { signIn, useSession } from 'next-auth/react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { data: session } = useSession();
+  const router = useRouter();
+  const { user } = useSelector(state => state.user);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Determine if we're technically "logged in" based on Redux state
+  const isLoggedIn = !!user;
 
   const links = [
     { name: 'Home', path: '/' },
@@ -20,6 +24,10 @@ export default function Navbar() {
     { name: 'Insights', path: '/insights' },
     { name: 'Contact', path: '/contact' },
   ];
+
+  const handleLogin = () => {
+    router.push('/login');
+  };
 
   return (
     <nav className="sticky top-0 z-50 bg-[#0a0a0f]/80 backdrop-blur-xl border-b border-white/5">
@@ -49,13 +57,13 @@ export default function Navbar() {
           </div>
 
           <div className="hidden xl:flex gap-4 items-center">
-            {session ? (
+            {isLoggedIn ? (
               <Link href="/dashboard" className="px-5 py-2.5 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 text-white hover:from-cyan-400 hover:to-purple-400 transition-all text-sm font-semibold tracking-wide shadow-lg shadow-cyan-500/20">
                 Go to Dashboard
               </Link>
             ) : (
               <button 
-                onClick={() => signIn('google')}
+                onClick={handleLogin}
                 className="px-5 py-2.5 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 text-white hover:from-cyan-400 hover:to-purple-400 transition-all text-sm font-semibold tracking-wide shadow-lg shadow-cyan-500/20"
               >
                 Get Started
@@ -95,7 +103,7 @@ export default function Navbar() {
               </Link>
             ))}
             <div className="pt-3 mt-3 border-t border-white/5">
-              {session ? (
+              {isLoggedIn ? (
                 <Link
                   href="/dashboard"
                   onClick={() => setMobileMenuOpen(false)}
@@ -105,7 +113,7 @@ export default function Navbar() {
                 </Link>
               ) : (
                 <button
-                  onClick={() => { signIn('google'); setMobileMenuOpen(false); }}
+                  onClick={() => { handleLogin(); setMobileMenuOpen(false); }}
                   className="w-full px-5 py-2.5 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 text-white text-sm font-semibold"
                 >
                   Get Started

@@ -4,16 +4,17 @@
   --color-cyan-glow: #06b6d4;
   --color-purple-glow: #a855f7;
   --color-blue-glow: #3b82f6;
-  --color-dark-bg: #0a0a0f;
-  --color-dark-card: #111118;
-  --color-dark-border: #1e1e2e;
+  --color-dark-bg: #f8fafc; /* Changed to lighter bg for standard SWAIS view */
+  --color-dark-card: #ffffff;
+  --color-navy: #0f2851;
+  --color-gold: #cda653;
   --font-sans: 'Inter', 'Open Sans', 'Poppins', sans-serif;
 }
 
 body {
   margin: 0;
-  background-color: #0a0a0f;
-  color: #e2e8f0;
+  background-color: #f8fafc;
+  color: #0f2851;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
