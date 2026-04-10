@@ -5,6 +5,11 @@ export const metadata = {
   title: 'SWAIS – Saraf Worldsphere AI Services',
   description: 'Intelligent enterprise platforms that improve operational visibility, productivity, and decision-making.',
   keywords: 'AI, Analytics, Enterprise, Operations, Visibility',
+  icons: {
+    icon: '/icon.png',
+    shortcut: '/icon.png',
+    apple: '/icon.png',
+  },
 };
 
 export default function RootLayout({ children }) {
