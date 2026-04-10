@@ -100,7 +100,7 @@ export default function RegisterPage() {
         return;
       }
 
-      dispatch(setUser(data.user));
+      dispatch(setUser(data));
       router.replace('/pending');
     } catch {
       setError('Network error. Please try again.');
