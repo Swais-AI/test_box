@@ -1,9 +1,11 @@
 'use client';
 import StandardHeader from '../../components/StandardHeader';
 
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
 export default function LoginPage() {
   const handleGoogleSignIn = () => {
-    window.location.href = 'http://localhost:5000/auth/google';
+    window.location.href = `${API}/auth/google`;
   };
 
   return (

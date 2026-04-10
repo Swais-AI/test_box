@@ -17,7 +17,7 @@ export default function WarehouseDashboard() {
   useEffect(() => {
     let cancelled = false;
     dispatch({ type: 'loading' });
-    fetch((process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api') + '/warehouse-data', {
+    fetch((process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000') + '/api/warehouse-data', {
       credentials: 'include'
     })
       .then(res => {
