@@ -58,7 +58,13 @@ export default function RegisterPage() {
   }, [router]);
 
   const handleChange = (e) => {
-    setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    if (name === 'phone_number') {
+      const digitsOnly = value.replace(/\D/g, '').slice(0, 10);
+      setForm(f => ({ ...f, phone_number: digitsOnly }));
+    } else {
+      setForm(f => ({ ...f, [name]: value }));
+    }
     setError('');
   };
 
@@ -66,6 +72,7 @@ export default function RegisterPage() {
     if (!form.first_name.trim()) return 'First name is required.';
     if (!form.last_name.trim()) return 'Last name is required.';
     if (!form.phone_number.trim()) return 'Phone number is required.';
+    if (form.phone_number.length !== 10) return 'Phone number must be exactly 10 digits.';
     if (!form.dob) return 'Date of birth is required.';
     return '';
   };
@@ -119,11 +126,11 @@ export default function RegisterPage() {
     <div className="min-h-screen bg-[#f8fafc] flex flex-col font-sans">
       <StandardHeader />
 
-      <div className="flex-1 flex items-center justify-center p-6">
+      <div className="flex-1 flex items-center justify-center p-4 sm:p-6">
         <div className="bg-white rounded-3xl shadow-xl w-full max-w-2xl overflow-hidden border border-gray-100">
 
           {/* Navy top bar */}
-          <div className="bg-[#0f2851] px-10 py-8 text-white">
+          <div className="bg-[#0f2851] px-6 sm:px-10 py-6 sm:py-8 text-white">
             <h2 className="text-2xl font-bold tracking-wide">Complete Registration</h2>
             <p className="text-gray-300 text-sm mt-1">
               Welcome, {user?.name}. Fill in your details to get started.
@@ -156,12 +163,12 @@ export default function RegisterPage() {
           </div>
 
           {/* Form body */}
-          <div className="px-10 py-8">
+          <div className="px-6 sm:px-10 py-6 sm:py-8">
 
             {/* Step 1 — Personal Info */}
             {step === 1 && (
               <div className="space-y-5">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="relative">
                     <label className="block text-xs font-bold text-[#0f2851]/70 uppercase tracking-wider mb-2">First Name <span className="text-red-400">*</span></label>
                     <div className="relative">
@@ -198,7 +205,7 @@ export default function RegisterPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-[#0f2851]/70 uppercase tracking-wider mb-2">Phone Number <span className="text-red-400">*</span></label>
                     <div className="relative">
@@ -209,9 +216,16 @@ export default function RegisterPage() {
                       </div>
                       <input
                         type="tel" name="phone_number" value={form.phone_number} onChange={handleChange}
-                        placeholder="+91 98765 43210"
+                        placeholder="10-digit number"
+                        maxLength={10}
+                        inputMode="numeric"
                         className="w-full border-2 border-gray-100 bg-gray-50 rounded-xl pl-10 pr-4 py-3 text-sm font-medium text-[#0f2851] placeholder-gray-300 focus:outline-none focus:border-[#0f2851] focus:bg-white transition-all"
                       />
+                      {form.phone_number && (
+                        <span className={`absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold ${form.phone_number.length === 10 ? 'text-green-500' : 'text-gray-400'}`}>
+                          {form.phone_number.length}/10
+                        </span>
+                      )}
                     </div>
                   </div>
                   <div>
@@ -237,7 +251,7 @@ export default function RegisterPage() {
             {step === 2 && (
               <div className="space-y-4">
                 <p className="text-sm text-gray-500 mb-2">Select the industry category that applies to your organisation.</p>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {INDUSTRIES.map(ind => (
                     <button
                       key={ind}

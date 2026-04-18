@@ -1,6 +1,10 @@
 import { notFound } from 'next/navigation';
 import { pageContent } from '../../../data/pageContent';
 
+export function generateStaticParams() {
+  return Object.keys(pageContent).map(slug => ({ slug }));
+}
+
 export default async function GenericPage({ params }) {
   const { slug } = await params;
   const content = pageContent[slug];

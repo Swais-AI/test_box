@@ -62,11 +62,11 @@ export default function PendingPage() {
     <div className="min-h-screen bg-[#f8fafc] flex flex-col font-sans">
       <StandardHeader />
 
-      <div className="flex-1 flex items-center justify-center p-6">
+      <div className="flex-1 flex items-center justify-center p-4 sm:p-6">
         <div className="bg-white rounded-3xl shadow-xl w-full max-w-lg overflow-hidden border border-gray-100">
 
           {/* Navy top */}
-          <div className="bg-[#0f2851] px-10 py-10 text-white text-center">
+          <div className="bg-[#0f2851] px-6 sm:px-10 py-8 sm:py-10 text-white text-center">
             {/* Animated clock icon */}
             <div className="flex justify-center mb-5">
               <div className="w-20 h-20 rounded-full bg-[#cda653]/20 border-4 border-[#cda653] flex items-center justify-center">
@@ -82,7 +82,7 @@ export default function PendingPage() {
           </div>
 
           {/* Body */}
-          <div className="px-10 py-8 space-y-6">
+          <div className="px-6 sm:px-10 py-6 sm:py-8 space-y-6">
 
             {/* User summary */}
             {user && (

@@ -38,25 +38,25 @@ export default function StandardHeader() {
   };
 
   return (
-    <header className="w-full bg-white text-[#0f2851] py-4 px-8 flex justify-between items-center shadow-sm border-b border-gray-100 sticky top-0 z-50">
-      <Link href="/" className="flex items-center font-bold text-lg tracking-wide hover:opacity-80 transition-opacity group">
-        <span className="font-extrabold mr-2 group-hover:text-[#cda653] transition-colors">SWAIS</span>
-        <span className="text-gray-300 mx-2">|</span>
-        <span className="text-sm font-medium text-gray-500">Saraf Worldsphere AI Services</span>
-        <span className="ml-3 text-xs bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full font-normal hidden sm:inline">Home</span>
+    <header className="w-full bg-white text-[#0f2851] py-3 sm:py-4 px-4 sm:px-8 flex justify-between items-center shadow-sm border-b border-gray-100 sticky top-0 z-50">
+      <Link href="/" className="flex items-center font-bold tracking-wide hover:opacity-80 transition-opacity group min-w-0">
+        <span className="font-extrabold mr-2 group-hover:text-[#cda653] transition-colors text-base sm:text-lg shrink-0">SWAIS</span>
+        <span className="text-gray-300 mx-1 sm:mx-2 shrink-0">|</span>
+        <span className="text-xs sm:text-sm font-medium text-gray-500 truncate hidden xs:block">Saraf Worldsphere AI Services</span>
+        <span className="ml-2 sm:ml-3 text-xs bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full font-normal hidden sm:inline shrink-0">Home</span>
       </Link>
 
-      <div className="flex items-center gap-6">
-        <span className="font-semibold tracking-wide text-[#0f2851]">{time}</span>
+      <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+        <span className="font-semibold tracking-wide text-[#0f2851] text-xs sm:text-sm hidden md:block">{time}</span>
 
         {user && (
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-gray-500 font-medium hidden sm:block">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <span className="text-sm text-gray-500 font-medium hidden lg:block">
               {user.name || user.email}
             </span>
             <button
               onClick={handleLogout}
-              className="px-4 py-1.5 rounded-lg border-2 border-[#0f2851] text-[#0f2851] text-sm font-semibold hover:bg-[#0f2851] hover:text-white transition-colors"
+              className="px-3 sm:px-4 py-1.5 rounded-lg border-2 border-[#0f2851] text-[#0f2851] text-xs sm:text-sm font-semibold hover:bg-[#0f2851] hover:text-white transition-colors"
             >
               Logout
             </button>
