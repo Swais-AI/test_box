@@ -23,4 +23,7 @@ class Settings:
     # URLs
     FRONTEND_URL: str          = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
+    # Cookie domain — set to ".swais.in" in production so cookie works across subdomains
+    COOKIE_DOMAIN: str         = os.getenv("COOKIE_DOMAIN", "")
+
 settings = Settings()

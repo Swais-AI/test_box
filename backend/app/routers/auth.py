@@ -90,7 +90,7 @@ async def google_callback(code: str, db: Session = Depends(get_db)):
         redirect_to = f"{frontend}/dashboard"
 
     response = RedirectResponse(redirect_to)
-    response.set_cookie(
+    cookie_kwargs = dict(
         key="token",
         value=token,
         httponly=True,
@@ -98,6 +98,10 @@ async def google_callback(code: str, db: Session = Depends(get_db)):
         samesite="lax",
         max_age=COOKIE_MAX_AGE,
     )
+    # In production, scope the cookie to .swais.in so both swais.in and api.swais.in can read it
+    if settings.COOKIE_DOMAIN:
+        cookie_kwargs["domain"] = settings.COOKIE_DOMAIN
+    response.set_cookie(**cookie_kwargs)
     return response
 
 
