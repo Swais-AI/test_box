@@ -3,6 +3,9 @@ from fastapi import APIRouter, Depends, Request, Response
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 import httpx
+import logging
+
+logger = logging.getLogger(__name__)
 
 from app.config import settings
 from app.database import get_db
@@ -47,6 +50,11 @@ async def google_callback(code: str, db: Session = Depends(get_db)):
                 "redirect_uri":  settings.GOOGLE_CALLBACK_URL,
             })
             tokens = token_res.json()
+            logger.error(f"Google token response: {tokens}")
+
+            if 'access_token' not in tokens:
+                logger.error(f"Token exchange failed: {tokens}")
+                return RedirectResponse(f"{frontend}?error=auth_failed")
 
             # Get user profile from Google
             info_res = await client.get(
@@ -54,8 +62,10 @@ async def google_callback(code: str, db: Session = Depends(get_db)):
                 headers={"Authorization": f"Bearer {tokens['access_token']}"},
             )
             info = info_res.json()
+            logger.error(f"Google user info: {info}")
 
-    except Exception:
+    except Exception as e:
+        logger.error(f"Auth exception: {e}")
         return RedirectResponse(f"{frontend}?error=auth_failed")
 
     email = info.get("email")
