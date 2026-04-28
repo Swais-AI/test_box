@@ -35,44 +35,44 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-[#f8fafc] flex flex-col font-sans">
       <StandardHeader />
 
-      <div className="flex-1 flex items-center justify-center p-4 sm:p-8">
-        <div className="bg-white rounded-3xl shadow-xl w-full max-w-5xl flex flex-col md:flex-row overflow-hidden border border-gray-100">
-
+      <div className="flex-1 flex items-center justify-center p-8">
+        <div className="bg-white rounded-3xl shadow-xl w-full max-w-5xl flex overflow-hidden border border-gray-100 min-h-[500px]">
+          
           {/* Left Side: Navy Panel */}
-          <div className="w-full md:w-1/3 bg-[#0f2851] text-white p-8 md:p-10 flex flex-col justify-center relative">
+          <div className="w-1/3 bg-[#0f2851] text-white p-10 flex flex-col justify-center relative">
             <div className="relative z-10">
-              <svg className="w-10 h-10 md:w-12 md:h-12 text-[#cda653] mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <svg className="w-12 h-12 text-[#cda653] mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <circle cx="12" cy="12" r="10" stroke="#cda653" />
                 <path d="M12 2v20M2 12h20M4 4l16 16M4 20L20 4" stroke="#cda653" strokeOpacity="0.5"/>
                 <circle cx="12" cy="12" r="3" fill="#cda653" />
               </svg>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-wider mb-2">SWAIS</h2>
-              <h3 className="text-[#cda653] font-semibold text-lg md:text-xl mb-4 leading-tight">AI Function Access Console</h3>
-              <p className="text-gray-300 md:pr-4 text-sm">Controlled access based on registered User Type</p>
+              <h2 className="text-4xl font-bold tracking-wider mb-2">SWAIS</h2>
+              <h3 className="text-[#cda653] font-semibold text-xl mb-6 leading-tight">AI Function Access Console</h3>
+              <p className="text-gray-300 pr-4">Controlled access based on registered User Type</p>
             </div>
             {/* Top gold corner accent */}
             <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#cda653] to-transparent opacity-30"></div>
           </div>
 
           {/* Right Side: Functions Grid */}
-          <div className="w-full md:w-2/3 p-6 sm:p-10 flex flex-col justify-center bg-white relative pb-16">
-            <h2 className="text-[#0f2851] text-2xl sm:text-3xl font-bold mb-2">Welcome, {user?.name || 'User'}</h2>
-            <p className="text-[#cda653] font-bold text-base sm:text-lg mb-2">Registered Access Category: {industry || user?.user_type || ''}</p>
-            <p className="text-gray-500 mb-6 sm:mb-8 text-sm">Please select your enabled industry function to continue.</p>
+          <div className="w-2/3 p-10 flex flex-col justify-center bg-white relative">
+            <h2 className="text-[#0f2851] text-3xl font-bold mb-2">Welcome, {user?.name || 'User'}</h2>
+            <p className="text-[#cda653] font-bold text-lg mb-2">Registered Access Category: {industry || user?.user_type || ''}</p>
+            <p className="text-gray-500 mb-8">Please select your enabled industry function to continue.</p>
 
-            <div className="flex flex-wrap gap-3 sm:gap-4 justify-center max-w-2xl mx-auto">
+            <div className="flex flex-wrap gap-4 justify-center max-w-2xl mx-auto">
               {functions.map(func => (
                 <button
                   key={func.name}
                   onClick={() => handleFunctionClick(func)}
-                  className={`relative px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-sm tracking-wide shadow-sm transition-all border ${
-                    func.enabled
-                      ? 'bg-[#22c55e] border-[#16a34a] text-white hover:bg-[#16a34a] hover:shadow-md transform hover:-translate-y-0.5'
+                  className={`relative px-8 py-4 rounded-xl font-bold text-sm tracking-wide shadow-sm transition-all border ${
+                    func.enabled 
+                      ? 'bg-[#22c55e] border-[#16a34a] text-white hover:bg-[#16a34a] hover:shadow-md transform hover:-translate-y-0.5' // Green for WAREHOUSING enabled
                       : 'bg-white border-gray-200 text-gray-500 cursor-not-allowed opacity-80'
                   }`}
                 >
                   {func.name}
-
+                  
                   {/* Lock icon for disabled */}
                   {!func.enabled && (
                     <span className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow-sm border border-gray-100">
@@ -85,7 +85,7 @@ export default function DashboardPage() {
               ))}
             </div>
 
-            <p className="text-xs text-gray-400 mt-8 text-center tracking-wide font-light bg-gray-50 py-3 rounded-lg w-full absolute bottom-0 left-0">
+            <p className="text-xs text-gray-400 mt-10 text-center tracking-wide font-light bg-gray-50 py-3 rounded-lg w-full absolute bottom-0 left-0">
               Only the registered user category is active in this phase. Other categories are visible but not clickable.
             </p>
           </div>

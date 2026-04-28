@@ -3,17 +3,12 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
-import SolutionsMegaMenu from './SolutionsMegaMenu';
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { user } = useSelector(state => state.user);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [megaMenuOpen, setMegaMenuOpen] = useState(false);
-
-  // Close mega menu on route change
-  useEffect(() => { setMegaMenuOpen(false); }, [pathname]);
 
   // Determine if we're technically "logged in" based on Redux state
   const isLoggedIn = !!user;
@@ -21,7 +16,10 @@ export default function Navbar() {
   const links = [
     { name: 'Home', path: '/' },
     { name: 'Platform', path: '/platform' },
-    { name: 'Collaborations', path: '/collaborations' },
+    { name: 'Solutions', path: '/solutions' },
+    { name: 'Industries', path: '/industries' },
+    { name: 'Academy', path: '/academy' },
+    { name: 'Partnerships', path: '/partnerships' },
     { name: 'Company', path: '/company' },
     { name: 'Insights', path: '/insights' },
     { name: 'Contact', path: '/contact' },
@@ -46,35 +44,9 @@ export default function Navbar() {
 
           <div className="hidden xl:block">
             <div className="ml-10 flex items-baseline space-x-1">
-              {/* Home, Platform */}
-              {links.slice(0, 2).map(link => (
-                <Link
-                  key={link.name}
-                  href={link.path}
-                  className={`nav-btn ${pathname === link.path ? 'active' : ''}`}
-                >
-                  {link.name}
-                </Link>
-              ))}
-
-              {/* Solutions mega-menu trigger — between Platform and Collaborations */}
-              <button
-                onClick={() => setMegaMenuOpen(prev => !prev)}
-                className={`nav-btn flex items-center gap-1.5 ${megaMenuOpen ? 'text-cyan-400 bg-cyan-500/15' : ''}`}
-              >
-                Solutions
-                <svg
-                  className={`w-3.5 h-3.5 transition-transform duration-200 ${megaMenuOpen ? 'rotate-180 text-cyan-400' : ''}`}
-                  fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                </svg>
-              </button>
-
-              {/* Collaborations, Company, Insights, Contact */}
-              {links.slice(2).map(link => (
-                <Link
-                  key={link.name}
+              {links.map(link => (
+                <Link 
+                  key={link.name} 
                   href={link.path}
                   className={`nav-btn ${pathname === link.path ? 'active' : ''}`}
                 >
@@ -90,7 +62,7 @@ export default function Navbar() {
                 Go to Dashboard
               </Link>
             ) : (
-              <button
+              <button 
                 onClick={handleLogin}
                 className="px-5 py-2.5 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 text-white hover:from-cyan-400 hover:to-purple-400 transition-all text-sm font-semibold tracking-wide shadow-lg shadow-cyan-500/20"
               >
@@ -117,17 +89,10 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Full-screen overlay — rendered outside nav flow */}
-      {megaMenuOpen && (
-        <SolutionsMegaMenu onClose={() => setMegaMenuOpen(false)} />
-      )}
-
-      {/* Mobile menu */}
       {mobileMenuOpen && (
         <div className="xl:hidden border-t border-white/5 bg-[#0a0a0f]/95 backdrop-blur-xl">
           <div className="px-4 py-4 space-y-1">
-            {/* Home, Platform */}
-            {links.slice(0, 2).map(link => (
+            {links.map(link => (
               <Link
                 key={link.name}
                 href={link.path}
@@ -137,30 +102,6 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
-
-            {/* Solutions in mobile — between Platform and Collaborations */}
-            <button
-              onClick={() => { setMobileMenuOpen(false); setMegaMenuOpen(true); }}
-              className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-white/5 flex items-center justify-between"
-            >
-              Solutions
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-              </svg>
-            </button>
-
-            {/* Collaborations, Company, Insights, Contact */}
-            {links.slice(2).map(link => (
-              <Link
-                key={link.name}
-                href={link.path}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`block px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${pathname === link.path ? 'text-cyan-400 bg-cyan-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'}`}
-              >
-                {link.name}
-              </Link>
-            ))}
-
             <div className="pt-3 mt-3 border-t border-white/5">
               {isLoggedIn ? (
                 <Link

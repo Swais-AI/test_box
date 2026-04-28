@@ -15,7 +15,7 @@ export default function ContactPage() {
              </div>
              <div>
                <h3 className="text-2xl font-semibold text-white mb-3">Head Office</h3>
-                <p className="text-slate-400 leading-relaxed text-lg">Plot No. 199, Srinivasanagar<br/>Opposite Sun School<br/>Vizianagaram – 535002<br/>Andhra Pradesh, India</p>
+               <p className="text-slate-400 leading-relaxed text-lg">10-A Prithviraj Road<br/>New Delhi – 110011<br/>India</p>
              </div>
           </div>
           
@@ -24,8 +24,8 @@ export default function ContactPage() {
                <svg className="w-7 h-7 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
              </div>
              <div>
-               <h3 className="text-2xl font-semibold text-white mb-3">Other Offices</h3>
-              <p className="text-slate-400 leading-relaxed text-lg">10-A Prithviraj Road<br/>New Delhi – 110011<br/>India</p>
+               <h3 className="text-2xl font-semibold text-white mb-3">Branch Office</h3>
+               <p className="text-slate-400 leading-relaxed text-lg">Plot No. 199, Srinivasanagar<br/>Opposite Sun School<br/>Vizianagaram – 535002<br/>Andhra Pradesh, India</p>
              </div>
           </div>
         </div>
@@ -37,7 +37,7 @@ export default function ContactPage() {
              </div>
              <div className="text-center md:text-left">
                <h3 className="text-xl font-semibold text-white mb-1">Email</h3>
-               <a href="mailto:contact@swais.com" className="text-cyan-400 hover:text-cyan-300 transition-colors text-lg font-medium">contact@swais.in</a>
+               <a href="mailto:contact@swais.com" className="text-cyan-400 hover:text-cyan-300 transition-colors text-lg font-medium">contact@swais.com</a>
              </div>
           </div>
           
