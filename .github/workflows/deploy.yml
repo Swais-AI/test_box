@@ -31,8 +31,13 @@ jobs:
 
             echo ">>> Frontend setup..."
             cd /home/ubuntu/swais-website
-            /home/ubuntu/.nvm/versions/node/v20.20.2/bin/npm install
-            /home/ubuntu/.nvm/versions/node/v20.20.2/bin/npm run build
+
+            export NVM_DIR="$HOME/.nvm"
+            source $NVM_DIR/nvm.sh
+            nvm use 20
+
+            npm install
+            npm run build
 
             echo ">>> Restarting apps..."
             pm2 restart swais-backend
