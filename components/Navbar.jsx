@@ -3,12 +3,14 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
+import SolutionsMegaMenu from './SolutionsMegaMenu';
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { user } = useSelector(state => state.user);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [solutionsMenuOpen, setSolutionsMenuOpen] = useState(false);
 
   // Determine if we're technically "logged in" based on Redux state
   const isLoggedIn = !!user;
@@ -45,13 +47,24 @@ export default function Navbar() {
           <div className="hidden xl:block">
             <div className="ml-10 flex items-baseline space-x-1">
               {links.map(link => (
-                <Link 
-                  key={link.name} 
-                  href={link.path}
-                  className={`nav-btn ${pathname === link.path ? 'active' : ''}`}
-                >
-                  {link.name}
-                </Link>
+                link.name === 'Solutions' ? (
+                  <button
+                    key={link.name}
+                    type="button"
+                    onClick={() => setSolutionsMenuOpen(true)}
+                    className={`nav-btn ${solutionsMenuOpen ? 'active' : ''}`}
+                  >
+                    {link.name}
+                  </button>
+                ) : (
+                  <Link
+                    key={link.name}
+                    href={link.path}
+                    className={`nav-btn ${pathname === link.path ? 'active' : ''}`}
+                  >
+                    {link.name}
+                  </Link>
+                )
               ))}
             </div>
           </div>
@@ -93,14 +106,25 @@ export default function Navbar() {
         <div className="xl:hidden border-t border-white/5 bg-[#0a0a0f]/95 backdrop-blur-xl">
           <div className="px-4 py-4 space-y-1">
             {links.map(link => (
-              <Link
-                key={link.name}
-                href={link.path}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`block px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${pathname === link.path ? 'text-cyan-400 bg-cyan-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'}`}
-              >
-                {link.name}
-              </Link>
+              link.name === 'Solutions' ? (
+                <button
+                  key={link.name}
+                  type="button"
+                  onClick={() => { setSolutionsMenuOpen(true); setMobileMenuOpen(false); }}
+                  className="block w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                >
+                  {link.name}
+                </button>
+              ) : (
+                <Link
+                  key={link.name}
+                  href={link.path}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`block px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${pathname === link.path ? 'text-cyan-400 bg-cyan-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'}`}
+                >
+                  {link.name}
+                </Link>
+              )
             ))}
             <div className="pt-3 mt-3 border-t border-white/5">
               {isLoggedIn ? (
@@ -122,6 +146,10 @@ export default function Navbar() {
             </div>
           </div>
         </div>
+      )}
+
+      {solutionsMenuOpen && (
+        <SolutionsMegaMenu onClose={() => setSolutionsMenuOpen(false)} />
       )}
     </nav>
   );
