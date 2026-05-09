@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const BACKEND_URL = process.env.BACKEND_API_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.BACKEND_API_URL || (process.env.NODE_ENV === 'production' ? 'https://api.swais.in' : 'http://localhost:5000');
 
 export async function GET(request) {
   try {
