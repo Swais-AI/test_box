@@ -121,6 +121,45 @@ def get_users(
     return UsersListResponse(success=True, users=user_responses)
 
 
+@router.get("/users/stats", response_model=StatsResponse)
+def get_user_stats(
+    db: Session = Depends(get_db),
+    _: User = Depends(get_super_admin_user),
+):
+    """
+    Get user statistics for admin dashboard.
+    Must be declared BEFORE /users/{user_id} so 'stats' isn't matched as a user_id.
+    """
+    total = db.query(func.count(User.id)).scalar()
+    deleted = db.query(func.count(User.id)).filter(User.record_status == 'D').scalar()
+    active = db.query(func.count(User.id)).filter(
+        User.record_status != 'D',
+        User.is_active == True,
+        User.registration_complete == True
+    ).scalar()
+    inactive = db.query(func.count(User.id)).filter(
+        User.record_status != 'D',
+        User.is_active == False,
+        User.registration_complete == True
+    ).scalar()
+    pending = db.query(func.count(User.id)).filter(
+        User.record_status != 'D',
+        (User.is_active == False) | (User.registration_complete == False),
+        ~((User.is_active == False) & (User.registration_complete == True))
+    ).scalar()
+
+    return StatsResponse(
+        success=True,
+        stats={
+            "active": active or 0,
+            "inactive": inactive or 0,
+            "pending": pending or 0,
+            "deleted": deleted or 0,
+            "total": total or 0
+        }
+    )
+
+
 @router.get("/users/{user_id}", response_model=UserOut)
 def get_user(
     user_id: int,
@@ -179,54 +218,6 @@ def update_user_status(
         success=True,
         message=f"{len(updated_users)} user(s) {status_message}",
         updatedUsers=updated_users
-    )
-
-
-@router.get("/users/stats", response_model=StatsResponse)
-def get_user_stats(
-    db: Session = Depends(get_db),
-    _: User = Depends(get_super_admin_user),
-):
-    """
-    Get user statistics for admin dashboard.
-    Returns counts for active, inactive, pending, deleted, and total users.
-    """
-    # Count total users
-    total = db.query(func.count(User.id)).scalar()
-
-    # Count deleted users
-    deleted = db.query(func.count(User.id)).filter(User.record_status == 'D').scalar()
-
-    # Count active users (is_active=true AND registration_complete=true AND not deleted)
-    active = db.query(func.count(User.id)).filter(
-        User.record_status != 'D',
-        User.is_active == True,
-        User.registration_complete == True
-    ).scalar()
-
-    # Count inactive users (is_active=false AND registration_complete=true AND not deleted)
-    inactive = db.query(func.count(User.id)).filter(
-        User.record_status != 'D',
-        User.is_active == False,
-        User.registration_complete == True
-    ).scalar()
-
-    # Count pending users (not active OR not registered complete, AND not inactive, AND not deleted)
-    pending = db.query(func.count(User.id)).filter(
-        User.record_status != 'D',
-        (User.is_active == False) | (User.registration_complete == False),
-        ~((User.is_active == False) & (User.registration_complete == True))
-    ).scalar()
-
-    return StatsResponse(
-        success=True,
-        stats={
-            "active": active or 0,
-            "inactive": inactive or 0,
-            "pending": pending or 0,
-            "deleted": deleted or 0,
-            "total": total or 0
-        }
     )
 
 
