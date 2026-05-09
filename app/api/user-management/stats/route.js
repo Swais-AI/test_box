@@ -1,16 +1,10 @@
 import { NextResponse } from 'next/server';
-import { requireSuperAdmin } from '@/lib/auth';
 
 const BACKEND_URL = process.env.BACKEND_API_URL || 'http://localhost:5000';
 
 export async function GET(request) {
   try {
-    const auth = await requireSuperAdmin(request);
-    if (auth.error) {
-      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
-    }
-
-    // Forward request to FastAPI backend
+    // Forward request to FastAPI backend (auth handled by FastAPI)
     const response = await fetch(`${BACKEND_URL}/admin/users/stats`, {
       method: 'GET',
       headers: {
@@ -20,7 +14,7 @@ export async function GET(request) {
     });
     
     if (!response.ok) {
-      const error = await response.json();
+      const error = await response.json().catch(() => ({ detail: 'Backend error' }));
       return NextResponse.json({ success: false, error: error.detail || 'Backend error' }, { status: response.status });
     }
     
