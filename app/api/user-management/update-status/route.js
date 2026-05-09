@@ -1,54 +1,41 @@
 import { NextResponse } from 'next/server';
-import pool from '@/lib/db';
+import { requireSuperAdmin } from '@/lib/auth';
+
+const BACKEND_URL = process.env.BACKEND_API_URL || 'http://localhost:5000';
 
 export async function PUT(request) {
   try {
+    const auth = await requireSuperAdmin(request);
+    if (auth.error) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
+    }
+
     const { userIds, newStatus } = await request.json();
     
     if (!userIds || userIds.length === 0) {
       return NextResponse.json({ success: false, error: 'No users selected' }, { status: 400 });
     }
     
-    let updateFields = {};
-    let statusMessage = '';
+    // Forward request to FastAPI backend
+    const response = await fetch(`${BACKEND_URL}/admin/users/update-status`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': request.headers.get('cookie') || '',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ userIds, newStatus }),
+    });
     
-    // Map status letter to database fields
-    if (newStatus === 'A') {
-      updateFields = { is_active: true, registration_complete: true };
-      statusMessage = 'activated';
-    } else if (newStatus === 'I') {
-      updateFields = { is_active: false, registration_complete: true };
-      statusMessage = 'deactivated';
-    } else if (newStatus === 'P') {
-      updateFields = { is_active: false, registration_complete: false };
-      statusMessage = 'set to pending';
-    } else if (newStatus === 'D') {
-      updateFields = { record_status: 'D' };
-      statusMessage = 'deleted';
+    if (!response.ok) {
+      const error = await response.json();
+      return NextResponse.json({ success: false, error: error.detail || 'Backend error' }, { status: response.status });
     }
     
-    const setClause = Object.keys(updateFields)
-      .map((key, i) => `${key} = $${i + 2}`)
-      .join(', ');
-    
-    const placeholders = userIds.map((_, i) => `$${i + Object.keys(updateFields).length + 2}`).join(',');
-    const query = `
-      UPDATE users_master 
-      SET ${setClause}
-      WHERE user_id IN (${placeholders}) 
-      RETURNING user_id, full_name as name
-    `;
-    
-    const params = [...Object.values(updateFields), ...userIds];
-    const result = await pool.query(query, params);
-    
-    return NextResponse.json({ 
-      success: true, 
-      message: `${result.rowCount} user(s) ${statusMessage}`,
-      updatedUsers: result.rows 
-    });
+    const data = await response.json();
+    return NextResponse.json(data);
   } catch (error) {
-    console.error('Error:', error);
+    console.error('[API Proxy Error]:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

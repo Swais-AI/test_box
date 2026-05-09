@@ -1,73 +1,41 @@
 import { NextResponse } from 'next/server';
-import pool from '@/lib/db';
+import { requireSuperAdmin } from '@/lib/auth';
+
+const BACKEND_URL = process.env.BACKEND_API_URL || 'http://localhost:5000';
 
 export async function GET(request) {
   try {
+    const auth = await requireSuperAdmin(request);
+    if (auth.error) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
+    }
+
     const { searchParams } = new URL(request.url);
-    const search = searchParams.get('search');
-    const status = searchParams.get('status');
+    const search = searchParams.get('search') || '';
+    const status = searchParams.get('status') || '';
     
-    let query = `
-      SELECT 
-        user_id, 
-        full_name as name, 
-        email_id as email, 
-        mobile_no as phone,
-        user_type as interest,
-        is_active,
-        registration_complete,
-        record_status,
-        created_datetime as created_at
-      FROM users_master 
-      WHERE record_status != 'D' OR record_status IS NULL
-    `;
-    let params = [];
-    let paramIndex = 1;
+    // Forward request to FastAPI backend
+    const backendUrl = new URL('/admin/users', BACKEND_URL);
+    if (search) backendUrl.searchParams.set('search', search);
+    if (status) backendUrl.searchParams.set('status', status);
     
-    // Search filter
-    if (search) {
-      query += ` AND (full_name ILIKE $${paramIndex} OR email_id ILIKE $${paramIndex} OR mobile_no ILIKE $${paramIndex})`;
-      params.push(`%${search}%`);
-      paramIndex++;
-    }
-    
-    // Status filter
-    if (status && status !== 'All') {
-      if (status === 'A') {
-        query += ` AND is_active = true AND registration_complete = true`;
-      } else if (status === 'P') {
-        query += ` AND (is_active = false OR registration_complete = false)`;
-      } else if (status === 'I') {
-        query += ` AND is_active = false AND registration_complete = true`;
-      } else if (status === 'D') {
-        query += ` AND record_status = 'D'`;
-      }
-    }
-    
-    query += ' ORDER BY user_id DESC';
-    
-    const result = await pool.query(query, params);
-    
-    // Transform to match frontend expected format
-    const users = result.rows.map(user => {
-      let statusLetter = 'P'; // Default pending
-      if (user.is_active === true && user.registration_complete === true) {
-        statusLetter = 'A'; // Active
-      } else if (user.is_active === false && user.registration_complete === true) {
-        statusLetter = 'I'; // Inactive
-      } else if (user.record_status === 'D') {
-        statusLetter = 'D'; // Deleted
-      }
-      
-      return {
-        ...user,
-        status: statusLetter
-      };
+    const response = await fetch(backendUrl.toString(), {
+      method: 'GET',
+      headers: {
+        'Cookie': request.headers.get('cookie') || '',
+      },
+      credentials: 'include',
     });
     
-    return NextResponse.json({ success: true, users });
+    if (!response.ok) {
+      const error = await response.json();
+      return NextResponse.json({ success: false, error: error.detail || 'Backend error' }, { status: response.status });
+    }
+    
+    const data = await response.json();
+    return NextResponse.json(data);
   } catch (error) {
-    console.error('Error:', error);
+    console.error('[API Proxy Error]:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

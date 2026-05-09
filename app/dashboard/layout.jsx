@@ -20,6 +20,8 @@ export default function DashboardLayout({ children }) {
         return res.json();
       })
       .then(data => {
+        const isSuperAdmin = data.role === 'SUPER_ADMIN' || data.role === 'HEAD';
+        if (isSuperAdmin) { router.replace('/admin'); return; }
         if (!data.registration_complete) { router.replace('/register'); return; }
         if (!data.is_active) { router.replace('/pending'); return; }
         dispatch(setUser(data));
