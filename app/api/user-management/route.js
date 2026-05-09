@@ -1,0 +1,41 @@
+import { NextResponse } from 'next/server';
+import { requireSuperAdmin } from '@/lib/auth';
+
+const BACKEND_URL = process.env.BACKEND_API_URL || 'http://localhost:5000';
+
+export async function GET(request) {
+  try {
+    const auth = await requireSuperAdmin(request);
+    if (auth.error) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const search = searchParams.get('search') || '';
+    const status = searchParams.get('status') || '';
+    
+    // Forward request to FastAPI backend
+    const backendUrl = new URL('/admin/users', BACKEND_URL);
+    if (search) backendUrl.searchParams.set('search', search);
+    if (status) backendUrl.searchParams.set('status', status);
+    
+    const response = await fetch(backendUrl.toString(), {
+      method: 'GET',
+      headers: {
+        'Cookie': request.headers.get('cookie') || '',
+      },
+      credentials: 'include',
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      return NextResponse.json({ success: false, error: error.detail || 'Backend error' }, { status: response.status });
+    }
+    
+    const data = await response.json();
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error('[API Proxy Error]:', error);
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
