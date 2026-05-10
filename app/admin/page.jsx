@@ -14,7 +14,7 @@ export default function AdminHomePage() {
       .then(setAdmin)
       .catch(() => {});
 
-    fetch('/api/user-management/stats', { credentials: 'include' })
+    fetch(`${API}/admin/users/stats`, { credentials: 'include' })
       .then(r => r.ok ? r.json() : null)
       .then(d => d?.success && setStats(d.stats))
       .catch(() => {});
