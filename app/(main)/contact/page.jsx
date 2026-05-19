@@ -26,6 +26,9 @@ export default function ContactPage() {
              <div>
                <h3 className="text-2xl font-semibold text-white mb-3">Branches</h3>
                <p className="text-slate-400 leading-relaxed text-lg">10-A Prithviraj Road<br/>New Delhi – 110011<br/>India<br/><br/>Saraf Worldsphere AI Services Private Limited<br/>C/o. SDS College<br/>Shreeramnagar<br/>Garividi<br/>Vizianagaram - 535101<br/>A.P, India</p>
+               <p className="text-slate-400 leading-relaxed text-lg mt-6">
+    Garividi Branch, Near Railway Station, Garividi, Andhra Pradesh
+</p>
              </div>
           </div>
         </div>
