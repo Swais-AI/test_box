@@ -577,7 +577,7 @@ export default function AccreditationPage() {
             <h2>What Building on AWS Means for Clients</h2>
             <p>
               Our platform runs on AWS infrastructure — giving enterprise clients
-              reliability, scale, and security.
+              reliability, scale, and   security.
             </p>
           </div>
 
