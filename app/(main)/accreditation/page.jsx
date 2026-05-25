@@ -55,7 +55,6 @@ export default function AccreditationPage() {
           background: linear-gradient(135deg, #0a0a0f, #111827, #020617);
           z-index: -2;
         }
-
         .grid-overlay {
           position: fixed;
           inset: 0;
