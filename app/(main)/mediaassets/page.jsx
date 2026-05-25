@@ -14,7 +14,7 @@ export default function MediaAssetsPage() {
     "/photos/photo5.jpg",
     "/photos/photo6.jpg",
   ];
-  
+
   useEffect(() => {
 
     const items = document.querySelectorAll(".reveal");
@@ -333,7 +333,7 @@ useEffect(() => {
           </h1>
 
           <p className="hero-sub">
-            News coverage, visual stories, social updates, and memorable moments
+            News coverage, visual stories,  social updates, and memorable moments
             from the SWAIS journey.
           </p>
 
