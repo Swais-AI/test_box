@@ -24,6 +24,7 @@ export default function Navbar() {
     { name: 'Academy', path: '/academy' },
     { name: 'Saraswati' , path: '/saraswati'},
     { name: 'Collaborations', path: '/collaborations' },
+    { name: 'Media Assets', path: '/mediaassets' },
     { name: 'Company', path: '/company' },
     { name: 'Insights', path: '/insights' },
     { name: 'Contact', path: '/contact' },
