@@ -1,8 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function MediaAssetsPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const [activeTab, setActiveTab] = useState("socialMedia");
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -16,7 +20,14 @@ export default function MediaAssetsPage() {
   ];
 
   useEffect(() => {
+    const tab = searchParams.get("tab");
 
+    if (tab === "print" || tab === "socialMedia") {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
     const items = document.querySelectorAll(".reveal");
     items.forEach((item) => item.classList.add("visible"));
   }, [activeTab]);
@@ -42,33 +53,33 @@ export default function MediaAssetsPage() {
 
     setSelectedImage(galleryImages[nextIndex]);
   };
-useEffect(() => {
-  const handleKeyDown = (e) => {
-    if (!selectedImage) return;
 
-    if (e.key === "ArrowLeft") {
-      showPreviousImage();
-    }
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!selectedImage) return;
 
-    if (e.key === "ArrowRight") {
-      showNextImage();
-    }
+      if (e.key === "ArrowLeft") {
+        showPreviousImage();
+      }
 
-    if (e.key === "Escape") {
-      setSelectedImage(null);
-    }
-  };
+      if (e.key === "ArrowRight") {
+        showNextImage();
+      }
 
-  window.addEventListener("keydown", handleKeyDown);
+      if (e.key === "Escape") {
+        setSelectedImage(null);
+      }
+    };
 
-  return () => {
-    window.removeEventListener("keydown", handleKeyDown);
-  };
-}, [selectedImage]);
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedImage]);
 
   return (
     <>
-
       <style jsx global>{`
         body {
           background: #f9f1e1;
@@ -241,7 +252,6 @@ useEffect(() => {
           z-index: 10001;
         }
 
-
         .prev-btn {
           left: 20px;
         }
@@ -249,7 +259,6 @@ useEffect(() => {
         .next-btn {
           right: 20px;
         }
-
 
         .card {
           background: rgba(255, 248, 225, 0.85);
@@ -333,7 +342,7 @@ useEffect(() => {
           </h1>
 
           <p className="hero-sub">
-            News coverage, visual stories,  social updates, and memorable moments
+            News coverage, visual stories, social updates, and memorable moments
             from the SWAIS journey.
           </p>
 
@@ -342,14 +351,20 @@ useEffect(() => {
               className={`tab-btn ${
                 activeTab === "socialMedia" ? "active" : ""
               }`}
-              onClick={() => setActiveTab("socialMedia")}
+              onClick={() => {
+                setActiveTab("socialMedia");
+                router.push("/mediaassets?tab=socialMedia");
+              }}
             >
               📱 Social Media
             </button>
 
             <button
               className={`tab-btn ${activeTab === "print" ? "active" : ""}`}
-              onClick={() => setActiveTab("print")}
+              onClick={() => {
+                setActiveTab("print");
+                router.push("/mediaassets?tab=print");
+              }}
             >
               🖼️ Print Media
             </button>
@@ -363,7 +378,8 @@ useEffect(() => {
             <h2 className="section-title">
               Follow SWAIS <em>updates</em>
             </h2>
-             <p className="section-sub">
+
+            <p className="section-sub">
               Stay connected through LinkedIn and more.
             </p>
 
@@ -463,7 +479,6 @@ useEffect(() => {
           </section>
         )}
       </main>
-
     </>
   );
 }
