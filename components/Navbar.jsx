@@ -20,7 +20,7 @@ export default function Navbar() {
     { name: 'Home', path: '/' },
     { name: 'Platform', path: '/platform' },
     { name: 'Solutions', path: '/solutions' },
-    { name: 'Industries', path: '/industries' },
+    { name: 'Industries', path: '/industries'},
     { name: 'Academy', path: '/academy' },
     { name: 'Saraswati' , path: '/saraswati'},
     { name: 'Collaborations', path: '/collaborations' },
