@@ -41,7 +41,9 @@ jobs:
 
             echo ">>> Restarting apps..."
             pm2 restart swais-backend
-            pm2 restart swais-frontend
+            pm2 stop swais-frontend 2>/dev/null || true
+            pm2 delete swais-frontend 2>/dev/null || true
+            PORT=4002 pm2 start npm --name "swais-frontend" -- start
             pm2 save
 
             echo "Deploy complete!"
