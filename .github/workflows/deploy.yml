@@ -28,7 +28,7 @@ jobs:
               cd /home/ubuntu/test-box
               git pull origin main
             else
-              git clone https://github.com/Swais-AI/test_box.git /home/ubuntu/test-box
+              git clone https://Swais-AI:${{ secrets.GH_TOKEN }}@github.com/Swais-AI/test_box.git /home/ubuntu/test-box
               cd /home/ubuntu/test-box
             fi
 

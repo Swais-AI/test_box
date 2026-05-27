@@ -1,18 +1,15 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
-import SolutionsMegaMenu from './SolutionsMegaMenu';
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { user } = useSelector(state => state.user);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [solutionsMenuOpen, setSolutionsMenuOpen] = useState(false);
 
-  // Determine if we're technically "logged in" based on Redux state
   const isLoggedIn = !!user;
   const isSuperAdmin = isLoggedIn && (user?.role === 'SUPER_ADMIN' || user?.role === 'HEAD');
 
@@ -20,9 +17,9 @@ export default function Navbar() {
     { name: 'Home', path: '/' },
     { name: 'Platform', path: '/platform' },
     { name: 'Solutions', path: '/solutions' },
-    { name: 'Industries', path: '/industries'},
+    { name: 'Industries', path: '/industries' },
     { name: 'Academy', path: '/academy' },
-    { name: 'Saraswati' , path: '/saraswati'},
+    { name: 'Saraswati', path: '/saraswati' },
     { name: 'Collaborations', path: '/collaborations' },
     { name: 'Accreditation', path: '/accreditation' },
     { name: 'Media Assets', path: '/mediaassets' },
@@ -51,24 +48,13 @@ export default function Navbar() {
           <div className="hidden xl:block">
             <div className="ml-10 flex items-baseline space-x-1">
               {links.map(link => (
-                link.name === 'Solutions' ? (
-                  <button
-                    key={link.name}
-                    type="button"
-                    onClick={() => setSolutionsMenuOpen(true)}
-                    className={`nav-btn ${solutionsMenuOpen ? 'active' : ''}`}
-                  >
-                    {link.name}
-                  </button>
-                ) : (
-                  <Link
-                    key={link.name}
-                    href={link.path}
-                    className={`nav-btn ${pathname === link.path ? 'active' : ''}`}
-                  >
-                    {link.name}
-                  </Link>
-                )
+                <Link
+                  key={link.name}
+                  href={link.path}
+                  className={`nav-btn ${pathname === link.path ? 'active' : ''}`}
+                >
+                  {link.name}
+                </Link>
               ))}
             </div>
           </div>
@@ -91,7 +77,7 @@ export default function Navbar() {
                 Go to Dashboard
               </Link>
             ) : (
-              <button 
+              <button
                 onClick={handleLogin}
                 className="px-5 py-2.5 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 text-white hover:from-cyan-400 hover:to-purple-400 transition-all text-sm font-semibold tracking-wide shadow-lg shadow-cyan-500/20"
               >
@@ -122,25 +108,14 @@ export default function Navbar() {
         <div className="xl:hidden border-t border-white/5 bg-[#0a0a0f]/95 backdrop-blur-xl">
           <div className="px-4 py-4 space-y-1">
             {links.map(link => (
-              link.name === 'Solutions' ? (
-                <button
-                  key={link.name}
-                  type="button"
-                  onClick={() => { setSolutionsMenuOpen(true); setMobileMenuOpen(false); }}
-                  className="block w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-slate-400 hover:text-slate-200 hover:bg-white/5"
-                >
-                  {link.name}
-                </button>
-              ) : (
-                <Link
-                  key={link.name}
-                  href={link.path}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${pathname === link.path ? 'text-cyan-400 bg-cyan-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'}`}
-                >
-                  {link.name}
-                </Link>
-              )
+              <Link
+                key={link.name}
+                href={link.path}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${pathname === link.path ? 'text-cyan-400 bg-cyan-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'}`}
+              >
+                {link.name}
+              </Link>
             ))}
             {isSuperAdmin && (
               <Link
@@ -174,10 +149,6 @@ export default function Navbar() {
             </div>
           </div>
         </div>
-      )}
-
-      {solutionsMenuOpen && (
-        <SolutionsMegaMenu onClose={() => setSolutionsMenuOpen(false)} />
       )}
     </nav>
   );
