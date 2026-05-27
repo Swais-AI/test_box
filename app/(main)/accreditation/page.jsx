@@ -1,9 +1,27 @@
 "use client";
 
 import { useEffect } from "react";
+// START FEATURE FLAG CHANGE - Route Protection
+import { useRouter } from "next/navigation";
+import { FEATURE_FLAGS } from "@/lib/featureFlags";
+// END FEATURE FLAG CHANGE
 
 export default function AccreditationPage() {
+  // START FEATURE FLAG CHANGE - Route Protection
+  const router = useRouter();
+
   useEffect(() => {
+    if (!FEATURE_FLAGS.accreditation) {
+      router.replace("/");
+    }
+  }, [router]);
+  // END FEATURE FLAG CHANGE
+
+  useEffect(() => {
+    // START FEATURE FLAG CHANGE - Route Protection
+    if (!FEATURE_FLAGS.accreditation) return;
+    // END FEATURE FLAG CHANGE
+
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -27,6 +45,13 @@ export default function AccreditationPage() {
 
     return () => io.disconnect();
   }, []);
+
+  // START FEATURE FLAG CHANGE - Route Protection
+  // Prevents flash of Accreditation content while the redirect fires.
+  if (!FEATURE_FLAGS.accreditation) {
+    return null;
+  }
+  // END FEATURE FLAG CHANGE
 
   return (
     <>
