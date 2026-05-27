@@ -40,8 +40,8 @@ export default function AccreditationPage() {
         .accreditation-page {
           min-height: 100vh;
           background:
-            radial-gradient(circle at top left, rgba(255, 120, 40, 0.22), transparent 35%),
-            radial-gradient(circle at top right, rgba(0, 220, 255, 0.18), transparent 35%),
+            radial-gradient(circle at top left, rgba(8, 1, 21, 0.22), transparent 35%),
+            radial-gradient(circle at top right, rgba(8, 1, 21, 0.22), transparent 35%),
             #0a0a0f;
           color: white;
           position: relative;
@@ -373,7 +373,7 @@ export default function AccreditationPage() {
           padding: 70px 30px;
           border-radius: 32px;
           background:
-            radial-gradient(circle at top, rgba(255, 122, 24, 0.28), transparent 45%),
+            radial-gradient(circle at top, rgba(18, 8, 1, 0.28), transparent 45%),
             rgba(255, 255, 255, 0.06);
           border: 1px solid rgba(255, 255, 255, 0.1);
         }
