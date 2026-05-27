@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
-export default function MediaAssetsPage() {
+function MediaAssetsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -480,5 +480,13 @@ export default function MediaAssetsPage() {
         )}
       </main>
     </>
+  );
+}
+
+export default function MediaAssetsPage() {
+  return (
+    <Suspense>
+      <MediaAssetsContent />
+    </Suspense>
   );
 }
